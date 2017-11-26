@@ -1,12 +1,20 @@
-import React, { Component} from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { Component} from 'react'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView
+} from 'react-native'
 import DSSlider from './DSSlider'
 import DSStepper from './DSStepper'
 import DateHeader from './DateHeader'
 import TextButton from './TextButton'
-import { getMetricMetaInfo, timeToString } from '../utils/helpers'
+import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
 import { Ionicons } from '@expo/vector-icons'
 import { submitEntry, removeEntry } from '../utils/api'
+import { connect } from 'react-redux'
+import * as actions from '../actions'
+import { bindActionCreators } from 'redux'
 
 const initialState = {
   run: 0,
@@ -22,7 +30,7 @@ const SubmitButton = ({onPress}) => (
   </TouchableOpacity>
 )
 
-export default class AddEntry extends Component {
+class AddEntry extends Component {
   state = initialState
 
   increment = (metric) => {
@@ -54,7 +62,7 @@ export default class AddEntry extends Component {
     const key = timeToString()
     const entry = this.state
 
-    // update redux
+    this.props.addEntry({ [key]: entry })
 
     this.setState(initialState)
 
@@ -62,7 +70,7 @@ export default class AddEntry extends Component {
   }
   reset = () => {
     const key = timeToString()
-
+    this.props.addEntry({ [key]: getDailyReminderValue() })
     removeEntry(key)
   }
   render() {
@@ -81,7 +89,7 @@ export default class AddEntry extends Component {
     }
 
     return (
-      <View>
+      <ScrollView>
         <DateHeader
           date={(new Date()).toLocaleDateString()}
         />
@@ -109,7 +117,17 @@ export default class AddEntry extends Component {
           )
         })}
         <SubmitButton onPress={this.submit} />
-      </View>
+      </ScrollView>
     );
   }
 }
+
+export default connect(
+  (state) => {
+    const key = timeToString()
+    return {
+      alreadyLogged: state[key] && typeof state[key].today === 'undefined'
+    }
+  },
+  (dispatch) => bindActionCreators(actions, dispatch)
+)(AddEntry)
