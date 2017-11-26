@@ -6,6 +6,8 @@ import DateHeader from './DateHeader'
 import TextButton from './TextButton'
 import { getMetricMetaInfo, timeToString } from '../utils/helpers'
 import { Ionicons } from '@expo/vector-icons'
+import { submitEntry, removeEntry } from '../utils/api'
+
 const initialState = {
   run: 0,
   bike: 0,
@@ -51,14 +53,15 @@ export default class AddEntry extends Component {
   submit = () => {
     const key = timeToString()
     const entry = this.state
+
     this.setState(initialState)
-    //update redux, nav to home, save to db, notif
+
+    submitEntry({ key, entry })
   }
   reset = () => {
     const key = timeToString()
-    // update redux
-    // route to home
-    // update db
+
+    removeEntry(key)
   }
   render() {
     const metaInfo = getMetricMetaInfo()
