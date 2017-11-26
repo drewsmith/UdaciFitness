@@ -54,6 +54,8 @@ export default class AddEntry extends Component {
     const key = timeToString()
     const entry = this.state
 
+    // update redux
+
     this.setState(initialState)
 
     submitEntry({ key, entry })
