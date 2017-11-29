@@ -18,6 +18,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <View style={{flex: 1}}>
+          <View style={{height: 20}} />
           <History />
         </View>
       </Provider>

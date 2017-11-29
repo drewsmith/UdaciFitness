@@ -6,7 +6,7 @@ import { timeToString, getDailyReminderValue } from '../utils/helpers'
 export const retrieveCalendarResults = () => {
   return dispatch => {
     return fetchCalendarResults()
-        .then(entries => {
+        .then((entries) => {
           dispatch(receiveEntries(entries))
           if(!entries[timeToString()]) {
             dispatch(addEntry({
