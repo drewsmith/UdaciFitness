@@ -24,6 +24,8 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 import { bindActionCreators } from 'redux'
 
+import { NavigationActions } from 'react-navigation'
+
 const initialState = {
   run: 0,
   bike: 0,
@@ -119,13 +121,18 @@ class AddEntry extends Component {
     this.props.addEntry({ [key]: entry })
 
     this.setState(initialState)
-
+    this.toHome()
     submitEntry({ key, entry })
   }
   reset = () => {
     const key = timeToString()
     this.props.addEntry({ [key]: getDailyReminderValue() })
     removeEntry(key)
+  }
+  toHome = () => {
+    this.props.navigation.dispatch(NavigationActions.back({
+      key: 'AddEntry'
+    }))
   }
   render() {
     const metaInfo = getMetricMetaInfo()
