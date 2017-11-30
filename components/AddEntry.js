@@ -14,7 +14,13 @@ import DSStepper from './DSStepper'
 import DateHeader from './DateHeader'
 import TextButton from './TextButton'
 
-import { getMetricMetaInfo, timeToString, getDailyReminderValue } from '../utils/helpers'
+import {
+  getMetricMetaInfo,
+  timeToString,
+  getDailyReminderValue,
+  clearLocalNotification,
+  setLocalNotification
+} from '../utils/helpers'
 import { white, purple } from '../utils/colors'
 import { Ionicons } from '@expo/vector-icons'
 
@@ -122,7 +128,11 @@ class AddEntry extends Component {
 
     this.setState(initialState)
     this.toHome()
+
     submitEntry({ key, entry })
+
+    clearLocalNotification()
+      .then(setLocalNotification)
   }
   reset = () => {
     const key = timeToString()

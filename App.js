@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { View, Platform, StatusBar } from 'react-native';
+
 import AddEntry from './components/AddEntry'
 import History from './components/History'
 import EntryDetail from './components/EntryDetail'
+import Live from './components/Live'
+
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
@@ -13,6 +16,7 @@ import { purple, white } from './utils/colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 
 import { Constants } from 'expo'
+import { setLocalNotification } from './utils/helpers'
 
 const store = createStore(
   reducer,
@@ -41,6 +45,15 @@ const Tabs = TabNavigator({
       tabBarLabel: 'Add Entry',
       tabBarIcon: ({ tintColor }) => (
         <FontAwesome name='plus-square' size={30} color={tintColor} />
+      )
+    }
+  },
+  Live: {
+    screen: Live,
+    navigationOptions: {
+      tabBarLabel: 'Live',
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name='ios-speedometer' size={30} color={tintColor} />
       )
     }
   }
@@ -80,6 +93,9 @@ const MainNavigator = StackNavigator({
 })
 
 class App extends Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
   render() {
     return (
       <Provider store={store}>
